@@ -14,7 +14,7 @@ export const getProducts = async (req: Request, res: Response) => {
     }
 }
 
-export const getProductById = async (req: Request, res: Response) {
+export const getProductById = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
         const product = await Product.findByPk(id);

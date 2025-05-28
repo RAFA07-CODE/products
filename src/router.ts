@@ -13,7 +13,7 @@ router.get('/:id',
     .isInt()
     .withMessage('El ID del Producto no valido'),
     handleInputErrors,
-    getProductById
+    
   )
 
 router.post('/',

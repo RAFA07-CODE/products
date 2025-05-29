@@ -2,42 +2,29 @@ import { Request, Response } from 'express';
 import Product from '../models/Product.model';
 
 export const getProducts = async (req: Request, res: Response) => {
-    try {
-        const products = await Product.findAll({
-            order: [['price', 'DESC']]
-        });
-        console.log(products);
-        res.json({ data : products });
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: 'Error retrieving products' });
-    }
+    const products = await Product.findAll({
+         order: [
+            ['price', 'DESC']
+        ]
+    });
+    res.json({ data : products });
 }
 
 export const getProductById = async (req: Request, res: Response) => {
-    try {
-        const { id } = req.params;
-        const product = await Product.findByPk(id);
+    const { id } = req.params;
+    const product = await Product.findByPk(id);
 
-        if (!product) {
-            res.status(404).json({ error: 'Product not found' });
-            return 
-        }
-
-        res.json({ data : product });
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ error: 'Error retrieving product' });
+    if (!product) {
+         
+        res.status(404).json({ error: 'Product not found' });
+        return
     }
+    res.json({ data : product });
 }
 
 export const createProduct = async (req: Request, res: Response) => {
-    try {
-        const product = await Product.create(req.body);
-        res.json({ data: product, message: 'Product created successfully!' });
-    } catch (error) {
-        console.log(error)
-    }
+    const product = await Product.create(req.body);
+    res.status(201).json({ data: product });
 };
 
 export const updateProduct = async (req: Request, res: Response) => {

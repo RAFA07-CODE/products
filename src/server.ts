@@ -3,14 +3,14 @@ import router from './router';
 import db from './config/db';
 import colors from 'colors';
 
-async function connectDB() {
+export async function connectDB() {
 
   try {
       await db.authenticate();
       db.sync();
       //console.log(colors.bgGreen.bold( 'Connection to the database has been established successfully.'));
   } catch (error) {
-      //console.log(colors.bgRed.white( 'Error connecting to the database:'));
+      console.log(colors.bgRed.white( 'Hubo un error al conectar a la BD'));
   } 
 }
 

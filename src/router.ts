@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { body, param } from 'express-validator';
-import { createProduct } from './handlers/product';
+import { createProduct, deleteProduct, updateAvailability, updateProduct } from './handlers/product';
 import { getProducts } from './handlers/product';
 import { getProductById } from './handlers/product';
 import { handleInputErrors } from './middleware/index';
@@ -8,13 +8,13 @@ import { handleInputErrors } from './middleware/index';
 const router = Router();
 
 router.get('/', getProducts)
-router.get('/:id', 
-    param('id')
+router.get('/:id',
+  param('id')
     .isInt()
     .withMessage('El ID del Producto no valido'),
-    handleInputErrors,
-    
-  )
+  handleInputErrors,
+  getProductById
+)
 
 router.post('/',
   // Validar los datos del producto
@@ -35,16 +35,44 @@ router.post('/',
   createProduct
 )
 
-router.put('/', (req, res) => {
-  res.json({ message: 'Hello, put!' });
-})
+router.put('/:id',
+  param('id')
+    .isInt()
+    .withMessage('El ID del Producto no valido'),
+  body('name')
+    .notEmpty()
+    .withMessage('El nombre del Producto no puede estar vacío'),
 
-router.patch('/', (req, res) => {
-  res.json({ message: 'Hello, patch!' });
-})
+  body('price')
+    .notEmpty()
+    .withMessage('El precio del Producto no puede estar vacío')
+    .bail()
+    .isNumeric()
+    .withMessage('El precio del Producto debe ser un número')
+    .bail()
+    .custom(value => Number(value) > 0)
+    .withMessage('El precio debe ser mayor a 0'),
+  body('availability')
+    .isBoolean()
+    .withMessage('La disponibilidad del Producto debe ser un booleano'),
+  handleInputErrors,
+  updateProduct
+)
 
-router.delete('/', (req, res) => {
-  res.json({ message: 'Hello, delete!' });
-})
+router.patch('/:id',
+  param('id')
+    .isInt()
+    .withMessage('El ID del Producto no valido'),
+    handleInputErrors,
+  updateAvailability
+)
+
+router.delete('/:id',   
+  param('id')
+    .isInt()
+    .withMessage('El ID del Producto no valido'),
+    handleInputErrors,
+    deleteProduct
+  )
 
 export default router;

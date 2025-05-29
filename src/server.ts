@@ -8,9 +8,9 @@ async function connectDB() {
   try {
       await db.authenticate();
       db.sync();
-      console.log(colors.bgGreen.bold( 'Connection to the database has been established successfully.'));
+      //console.log(colors.bgGreen.bold( 'Connection to the database has been established successfully.'));
   } catch (error) {
-      console.log(colors.bgRed.white( 'Error connecting to the database:'));
+      //console.log(colors.bgRed.white( 'Error connecting to the database:'));
   } 
 }
 
@@ -25,6 +25,10 @@ server.use(express.json());
 
 //Rutas
 server.use('/api/products', router );
+
+server.get('/api', (req, res)=>{
+  res.json({msg: 'Desde API'})
+})
 
 
 export default server;
